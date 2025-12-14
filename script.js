@@ -582,4 +582,21 @@ const main = function () {
     })();
 
     DisplayController.displayNewGameScreen();
+
+    	// Handle swap marks checkbox
+	const swapMarksCheckbox = document.querySelector(".swap-marks-input");
+	if (swapMarksCheckbox) {
+		const originalDoOnNewGame = doOnNewGame;
+		const wrappedDoOnNewGame = () => {
+			const shouldSwap = swapMarksCheckbox.checked;
+			originalDoOnNewGame();
+			if (shouldSwap && Game.getFirstPlayingMark && playerNameInputs.length === 2) {
+				// Swap the player name inputs in the DOM to reflect swapped marks
+				const temp = playerNameInputs[0].value;
+				playerNameInputs[0].value = playerNameInputs[1].value;
+				playerNameInputs[1].value = temp;
+			}
+		};
+		doOnNewGame = wrappedDoOnNewGame;
+	}
 }();
